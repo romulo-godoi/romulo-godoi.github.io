@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYS_README: UNIDADE_RÔMULO // STATUS: NA_LUTA</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Orbitron:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #0a0e1a; /* Deep space blue */
+            --terminal-bg: #12182c; /* Slightly lighter terminal */
+            --text-color: #c0c5ce; /* Light grey/blue text */
+            --header-text: #e0e8ff; /* Brighter header text */
+            --accent-lime: #32ff7e; /* Bright lime */
+            --accent-cyan: #18dcff; /* Bright cyan */
+            --accent-magenta: #ff47d8; /* Bright magenta */
+            --accent-yellow: #feca57; /* Bright yellow */
+            --error-red: #ff4757;
+            --font-main: 'Fira Code', monospace;
+            --font-header: 'Orbitron', sans-serif; /* Futuristic */
+            --border-color: #343d58; /* Muted border */
+            --glow-cyan: 0 0 5px var(--accent-cyan), 0 0 10px var(--accent-cyan);
+            --glow-lime: 0 0 5px var(--accent-lime), 0 0 10px var(--accent-lime);
+            --scanline-opacity: 0.07;
+            --glitch-speed: 0.6s;
+            --transition-fast: all 0.2s ease-in-out;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-main); background-color: var(--bg-color); color: var(--text-color);
+            line-height: 1.7; /* Slightly more spacing */ overflow-x: hidden; position: relative;
+        }
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient( 0deg, rgba(0, 0, 0, var(--scanline-opacity)), rgba(0, 0, 0, var(--scanline-opacity)) 1px, transparent 1px, transparent 4px ); /* Wider spacing */
+            pointer-events: none; z-index: 1000;
+        }
+        .container-geral { max-width: 1200px; margin: 25px auto; padding: 20px; } /* More margin/padding */
+
+        .cabecalho-sistema {
+            border: 1px solid var(--border-color); background-color: var(--terminal-bg); padding: 25px; margin-bottom: 35px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 0 10px var(--border-color); /* More shadow */ position: relative; overflow: hidden;
+        }
+        .logo-cabecalho { font-family: var(--font-main); font-size: 0.8em; line-height: 1.2; color: var(--accent-cyan); white-space: pre; margin-bottom: 20px; text-align: center; opacity: 0.8; }
+        .titulo-cabecalho {
+            font-family: var(--font-header); font-size: 2em; /* Bigger Title */ color: var(--header-text); text-align: center; margin-bottom: 8px;
+            text-shadow: var(--glow-cyan); position: relative; animation: glitch1 var(--glitch-speed) infinite alternate steps(3, start);
+        }
+        /* Glitch Effect (copied from previous for brevity, same effect) */
+        .titulo-cabecalho::before, .titulo-cabecalho::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--terminal-bg); overflow: hidden; }
+        .titulo-cabecalho::before { left: 2px; text-shadow: -2px 0 var(--error-red); clip: rect(24px, 550px, 90px, 0); animation: glitch2 calc(var(--glitch-speed) * 1.5) infinite alternate-reverse steps(3, start); }
+        .titulo-cabecalho::after { left: -2px; text-shadow: -2px 0 var(--accent-lime), 2px 2px var(--accent-cyan); clip: rect(85px, 550px, 140px, 0); animation: glitch3 calc(var(--glitch-speed) * 1.1) infinite alternate-reverse steps(2, start); }
+        @keyframes glitch1 { 0%, 100% { transform: none; } 33% { transform: skew(-0.8deg) scale(1.01); } 66% { transform: skew(0.8deg) scale(0.99); }}
+        @keyframes glitch2 { 0% { clip: rect(42px, 9999px, 44px, 0); transform: skew(0.5deg) translateX(-3px); } 100% { clip: rect(12px, 9999px, 85px, 0); transform: skew(-0.3deg) translateX(3px); }}
+        @keyframes glitch3 { 0% { clip: rect(75px, 9999px, 86px, 0); transform: skew(-1deg) translateY(2px); } 100% { clip: rect(35px, 9999px, 50px, 0); transform: skew(0.7deg) translateY(-2px); }}
+
+        .subtitulo-cabecalho { font-family: var(--font-main); font-size: 1em; /* Slightly larger */ text-align: center; color: var(--text-color); margin-bottom: 20px; opacity: 0.9; }
+        .barra-status { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; /* More gap */ font-size: 0.85em; /* Slightly larger */ border-top: 1px dashed var(--border-color); padding-top: 15px; }
+        .barra-status span { color: var(--accent-yellow); }
+        .barra-status .erro { color: var(--error-red); animation: blinkError 0.8s infinite step-end;} /* Faster blink */
+        @keyframes blinkError { 50% { opacity: 0.1; color: var(--text-color); } } /* Blink to background color */
+
+        .card-perfil-usuario { display: flex; flex-wrap: wrap; background-color: var(--terminal-bg); border: 1px solid var(--border-color); padding: 20px; margin-bottom: 35px; box-shadow: var(--glow-lime); gap: 25px; align-items: flex-start; }
+        .area-foto { flex-basis: 200px; /* Wider photo area */ flex-grow: 0; flex-shrink: 0; text-align: center; position: relative; }
+        .placeholder-foto-ascii {
+            width: 190px; height: 230px; /* Taller ASCII art */
+            font-size: 0.6em; line-height: 1.0; /* Tighter line height for detail */
+            padding: 5px; border: 3px ridge var(--accent-lime); /* Ridge border */ margin: 0 auto 10px auto;
+            white-space: pre; overflow: hidden; color: var(--accent-lime);
+            background: radial-gradient(circle, rgba(40, 255, 140, 0.03) 5%, transparent 20%);
+            position: relative; /* Needed for positioning the image */
+            font-family: monospace; /* Force basic monospace */
+        }
+        /* Specific Image Style for eu.jpg inside ASCII */
+        .placeholder-foto-ascii img {
+            position: absolute;
+            top: 25px; /* Adjust Y position of the photo */
+            left: 25px; /* Adjust X position */
+            width: 140px; /* Width of the inner photo */
+            height: 150px; /* Height of the inner photo */
+            object-fit: cover; /* Crop image to fit */
+            border: 1px solid var(--accent-lime); /* Thin border around photo */
+            filter: grayscale(0.2) contrast(1.05) brightness(0.95); /* Subtle effect */
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+            z-index: 1; /* Image behind ASCII foreground if needed */
+        }
+        .legenda-foto { font-size: 0.85em; color: var(--text-color); font-style: italic; margin-top: 5px;}
+        .info-perfil { flex-basis: calc(100% - 225px); flex-grow: 1; }
+        .info-perfil h2 { font-family: var(--font-header); color: var(--header-text); font-size: 1.4em; margin-bottom: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; text-shadow: var(--glow-lime); }
+        .info-perfil h2::before { content: '// '; color: var(--accent-lime); opacity: 0.7;} /* Changed prompt */
+        .info-perfil p { margin-bottom: 12px; font-size: 1em; /* Larger text */ }
+        .info-perfil code { background-color: var(--bg-color); color: var(--accent-yellow); padding: 3px 5px; border-radius: 3px; font-weight: bold;}
+
+        .grid-conteudo { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); /* Wider min */ gap: 30px; /* More gap */ }
+        .card-dados { background-color: var(--terminal-bg); border: 1px solid var(--border-color); box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 20px; /* More padding */ display: flex; flex-direction: column; transition: var(--transition-fast); position: relative; }
+        .card-dados:hover { border-color: var(--accent-cyan); box-shadow: inset 0 0 12px rgba(24, 220, 255, 0.25), 0 0 18px rgba(24, 220, 255, 0.4); transform: translateY(-4px) scale(1.01); /* Slightly more lift */ }
+        .cabecalho-card { font-family: var(--font-header); font-size: 1.2em; color: var(--header-text); margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px dashed var(--border-color); display: flex; align-items: center; }
+        .cabecalho-card .icone { font-size: 1.4em; margin-right: 12px; line-height: 1; }
+        .cabecalho-card .verde { color: var(--accent-lime); text-shadow: var(--glow-lime); }
+        .cabecalho-card .ciano { color: var(--accent-cyan); text-shadow: var(--glow-cyan); }
+        .cabecalho-card .magenta { color: var(--accent-magenta); text-shadow: 0 0 5px var(--accent-magenta);}
+        .cabecalho-card .amarelo { color: var(--accent-yellow); text-shadow: 0 0 5px var(--accent-yellow);}
+        .cabecalho-card .vermelho { color: var(--error-red); text-shadow: 0 0 5px var(--error-red);}
+
+        .conteudo-card { font-size: 0.95em; /* Larger text */ flex-grow: 1; }
+        .conteudo-card p { margin-bottom: 12px; }
+        .conteudo-card code { background-color: var(--bg-color); color: var(--accent-yellow); padding: 3px 5px; border-radius: 3px;}
+        .conteudo-card strong { color: var(--accent-lime); font-weight: 600; }
+        .conteudo-card a { color: var(--accent-cyan); text-decoration: none; border-bottom: 1px dotted var(--accent-cyan); transition: var(--transition-fast);}
+        .conteudo-card a:hover { background-color: var(--accent-cyan); color: var(--bg-color); border-bottom-color: transparent; padding: 1px 3px; /* More padding on hover */ }
+
+        .entrada-log { background-color: rgba(80, 80, 80, 0.2); border-left: 4px solid var(--accent-yellow); /* Yellow border for realism? */ padding: 12px; margin-top: 18px; font-size: 0.9em; font-style: italic; /* Bring back italic here for notes */ color: #e0e0a0; /* Yellowish text */ }
+        .entrada-log::before { content: "[LOG_DE_BORDO] Registro #" counter(logcounter) ": "; font-weight: bold; color: var(--accent-yellow); display: block; margin-bottom: 6px; counter-increment: logcounter;}
+        .entrada-log strong { color: var(--accent-yellow); background: none; font-weight: bold; text-shadow: 0 0 3px var(--accent-yellow); }
+        body { counter-reset: logcounter; } /* Initialize log counter */
+
+        .barra-carregamento-falsa { width: 100%; height: 10px; /* Thicker */ background-color: var(--border-color); margin-top: auto; margin-bottom: 8px; padding: 2px; /* More padding */ overflow: hidden; }
+        .barra-carregamento-falsa div { width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-cyan) 0%, var(--accent-lime) 50%, var(--accent-yellow) 100%); animation: animCarregamentoRealista 5s ease-in-out infinite alternate; }
+        @keyframes animCarregamentoRealista { 0% { width: 15%; } 45% { width: 65%; } 65% { width: 70%; } 100% { width: 95%; } } /* More 'realistic' jumps */
+        .texto-carregamento { font-size: 0.8em; text-align: center; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; }
+
+        .card-dados.linux .conteudo-card code { color: var(--accent-lime); }
+        .card-dados.whovian .icone-tardis { display: inline-block; animation: giroTardis 5s linear infinite;}
+        @keyframes giroTardis { from { transform: rotateY(0deg);} to { transform: rotateY(360deg);}}
+        .card-dados.mochileiro .num42 { font-family: var(--font-header); font-size: 1.3em; color: var(--bg-color); background-color: var(--accent-yellow); padding: 4px 10px; border-radius: 50%; box-shadow: 0 0 10px var(--accent-yellow); margin: 0 8px; display: inline-block; transform: rotate(-8deg); transition: transform 0.1s ease; }
+        .card-dados.mochileiro .num42:hover { transform: rotate(8deg) scale(1.2); cursor: help; }
+        .card-dados.trisolaran .floresta-negra { color: #8a9bb8; background-color: #04060c; padding: 10px; display: block; margin-top: 12px; border: 1px solid #1a1f33; font-size: 0.9em; }
+        .card-dados.manias .tag-mania { display: inline-block; border: 1px solid var(--accent-magenta); color: var(--accent-magenta); padding: 2px 8px; margin-right: 10px; font-size: 0.85em; border-radius: 3px; background: rgba(255, 71, 216, 0.1); }
+        .card-dados.legado blockquote { border-left: 4px solid var(--accent-magenta); padding-left: 15px; margin: 15px 0; color: #e0c8ff; /* Lighter quote text */ font-style: italic; background: rgba(249, 87, 255, 0.05); }
+
+        .terminal-falso { background-color: black; border: 2px inset #333; /* Inset border */ color: var(--accent-lime); font-family: 'Fira Code', monospace; font-size: 0.9em; padding: 15px; min-height: 220px; overflow: auto; margin-top: 20px; box-shadow: inset 0 0 10px #000; }
+        .terminal-falso pre { white-space: pre-wrap; margin: 0;}
+        .terminal-falso .prompt::before { content: '[romulo@historia ~]$ '; color: var(--accent-cyan); } /* Personalized prompt */
+        .terminal-falso .output { color: #ddd; /* Off-white output */ }
+        .terminal-falso .erro { color: var(--error-red); font-weight: bold; /* Bold error */ }
+        .terminal-falso .comentario { color: #666; }
+        .terminal-falso .cursor { display: inline-block; width: 9px; height: 1.1em; background-color: var(--accent-lime); animation: piscaCursor 0.9s infinite step-end; vertical-align: text-bottom; box-shadow: 0 0 3px var(--accent-lime); }
+        @keyframes piscaCursor { 50% { opacity: 0; } }
+
+        .rodape-sistema { border: 1px solid var(--border-color); background-color: var(--terminal-bg); padding: 20px; margin-top: 40px; text-align: center; font-size: 0.85em; box-shadow: 0 0 10px rgba(0,0,0,0.4); }
+        .mensagem-rodape { margin-bottom: 15px; color: var(--accent-yellow); font-style: italic; }
+        .links-rodape a { color: var(--accent-cyan); text-decoration: none; margin: 0 10px;}
+        .links-rodape a:hover { text-decoration: underline; text-shadow: var(--glow-cyan); }
+        .ascii-rodape { font-size: 0.85em; line-height: 1.1; color: var(--border-color); margin-top: 20px; white-space: pre; opacity: 0.6; font-family: monospace; }
+
+        @media (max-width: 768px) { .titulo-cabecalho { font-size: 1.6em; } .subtitulo-cabecalho { font-size: 0.9em; } .grid-conteudo { grid-template-columns: 1fr; } .card-perfil-usuario { flex-direction: column; align-items: center;} .area-foto { flex-basis: auto; width: 100%; max-width: 250px;} .info-perfil { flex-basis: auto; width: 100%; text-align: center; } }
+        @media (max-width: 480px) { body { line-height: 1.6; } .container-geral { padding: 10px; margin: 15px auto;} .titulo-cabecalho { font-size: 1.4em; animation: none; } .titulo-cabecalho::before, .titulo-cabecalho::after { display: none; } .logo-cabecalho { font-size: 0.6em; } .barra-status { flex-direction: column; align-items: center; gap: 8px;} .cabecalho-card { font-size: 1.1em; } .conteudo-card { font-size: 0.9em; } .terminal-falso { font-size: 0.85em;} .placeholder-foto-ascii { width: 160px; height: 200px;} .placeholder-foto-ascii img { width: 110px; height: 120px; top: 20px; left: 20px;} }
+    </style>
+</head>
+<body>
+
+<div class="container-geral">
+
+    <header class="cabecalho-sistema">
+        <div class="logo-cabecalho">
+ ██╗  ██╗ ██╗ ███████╗ ███████╗  ██████╗ ███████╗ ███████╗ ██╗ ███╗   ██╗ ██╗
+ ██║  ██║ ██║ ╚══███╔╝ ███╔════╝ ██╔════╝ ██╔════╝ ██╔════╝ ██║ ████╗  ██║ ██║
+ ███████║ ██║   ███╔╝  ███║  ███╗ ██║  ███╗ ███████╗ ███████╗ ██║ ██╔██╗ ██║ ██║
+ ██╔══██║ ██║  ███╔╝   ███║   ██║ ██║   ██║ ╚════██║ ╚════██║ ██║ ██║╚██╗██║ ╚═╝
+ ██║  ██║ ██║ ███████╗ ╚███████║ ╚██████╔╝ ███████║ ███████║ ██║ ██║ ╚████║ ██╗
+ ╚═╝  ╚═╝ ╚═╝ ╚══════╝  ╚══════╝  ╚═════╝  ╚══════╝ ╚══════╝ ╚═╝ ╚═╝  ╚═══╝ ╚═╝
+ // SISTEMA_ROMULO v1.0 - Inicialização: Concluída (Com ressalvas) //
+        </div>
+        <h1 class="titulo-cabecalho" data-text="UNIDADE_RÔMULO // MODO_SOBREVIVENCIA">UNIDADE_RÔMULO // MODO_SOBREVIVENCIA</h1>
+        <p class="subtitulo-cabecalho">[Bootloader Histórico: Carregado - Sanidade: Comprometida - Paciência: Em falta]</p>
+        <div class="barra-status">
+            <span>USO_CPU: Alto (Tentando processar a lógica dos juros compostos)</span>
+            <span>MEMÓRIA: Lotada (Fatos inúteis sobre reis obscuros)</span>
+            <span class="erro">ESTADO_KERNEL: INSTÁVEL (Data da prova prática do Detran se aproxima!)</span>
+            <span>NÍVEL_CAFÉ: Abaixo da linha d'água</span>
+        </div>
+    </header>
+
+    <section class="card-perfil-usuario">
+        <div class="area-foto">
+            <div class="placeholder-foto-ascii">
+    / \_ / \
+   /          `\       <---- Casco (proteção contra a realidade?)
+  /(  ________ ` \
+ / ) / ____ \  |\      .---> Foto 3x4 da vítima ('eu.jpg')
+* _ | O) __ (O |\_\ \ *    Inserida aqui por motivos de... ah, sei lá.
+ |\ / ( (\) ) \ __|/ |
+ | |\____/^\___ /\_/ | `\ <-- Patinhas persistentes
+ | /    {{===}} _ \ |
+ / // /`- \ / -`\ \`\\ \  /--> Rabo (desnecessário, mas quem liga?)
+/ << /__________\`>> \ <----- Tartaruga. Lenta, teimosa. Metafórico?
+`--'           `--'       Talvez. Ou só um desenho tosco mesmo.
+       Escalando a Moldura
+      Rumo ao... Próximo Bug?
+            </div>
+             <img src="eu.jpg" alt="Foto de Rômulo? É o que dizem." >
+             <p class="legenda-foto">[Renderização: Tentativa de autorretrato com quelônio]</p>
+        </div>
+        <div class="info-perfil">
+            <h2>Arquivo de Log: /home/romulo/quem_sou_eu_afinal.md</h2>
+            <p>Rômulo aqui. Professor de História por profissão e teimosia, metido a programador nas horas em que deveria estar dormindo ou corrigindo prova. Aprendi a codar fuçando, na base do "tentativa e erro"... principalmente erro. Não fiz curso, não tenho diploma na área, só a cara de pau e umas ideias que às vezes (raramente) funcionam.</p>
+            <p>Meu dia-a-dia é um malabarismo entre explicar as Capitanias Hereditárias e entender porque diabos aquele <code>script</code> Python parou de funcionar do nada. Spoiler: geralmente é um ponto e vírgula esquecido ou alguma conspiração cósmica contra a minha pessoa.</p>
+            <p>Vejo a história e o código como farinha do mesmo saco: cheios de gambiarras, decisões questionáveis do passado que assombram o presente e uma beleza estranha no meio do caos. Só que um envolve reis mortos e o outro... bom, às vezes também envolve coisas mortas (processos, geralmente).</p>
+            <p>Estado Atual: Funcionando (com bugs conhecidos e vários desconhecidos).</p>
+        </div>
+    </section>
+
+    <main class="grid-conteudo">
+
+        <article class="card-dados linux">
+            <header class="cabecalho-card"><span class="icone verde">⚙️</span> SO: openSUSE Tumbleweed (Vulgo: 'A Emoção Inútil')</header>
+            <div class="conteudo-card">
+                <p>Instalei o Tumbleweed. Dizem que é "estar na crista da onda". Pra mim, é mais como tentar surfar num tsunami usando uma tábua de passar roupa. Cada <code>zypper dup</code> é uma roleta russa: ou ganho um kernel novinho ou meu sistema resolve tirar férias permanentes sem avisar. É uma relação tóxica, eu sei.</p>
+                <p>Mas pelo menos não preciso me preocupar com vírus. Já basta ter que lidar com o fantasma do Getúlio assombrando minhas aulas.</p>
+                 <div class="entrada-log">
+                     <strong>Registro #1:</strong> <code>Sistema decidiu que o conceito de 'data e hora' era opcional após update. Arquivos de log de 2077 apareceram misteriosamente. Solução: Format C:? Não, só reiniciei e fingi que nada aconteceu. A técnica histórica padrão para resolver problemas incômodos.</code>
+                 </div>
+            </div>
+             <div class="barra-carregamento-falsa"><div></div></div>
+             <p class="texto-carregamento">IGNORANDO DEPENDÊNCIAS QUEBRADAS...</p>
+        </article>
+
+        <article class="card-dados whovian">
+            <header class="cabecalho-card"><span class="icone ciano"><span class="icone-tardis">🌀</span></span> Crono-Análise: Fissura de Doctor Who na Realidade</header>
+            <div class="conteudo-card">
+                <p>Doctor Who é legalzinho e tal, mas sejamos sinceros: viajar no tempo seria um inferno. Imagina ter que explicar o Wi-Fi pra um bandeirante? Ou pior, ouvir ele reclamar que "no meu tempo, a gente caçava índio e não ficava vendo essa tela brilhante". Melhor assistir da poltrona mesmo.</p>
+                <p>E se a TARDIS caísse na mão de político brasileiro? Teríamos engarrafamento de caixa azul no espaço-tempo pra ir almoçar em Paris. Desastre cósmico anunciado.</p>
+                 <div class="entrada-log">
+                    <strong>Registro #2:</strong> <code>Usuário tentou calcular quanto tempo perderia em filas (Detran, banco, SUS) numa vida inteira. Resultado excedeu a capacidade do processador e sugeriu que seria mais rápido esperar o universo acabar. Informação considerada 'deprimente, mas precisa'.</code>
+                 </div>
+            </div>
+             <div class="barra-carregamento-falsa"><div></div></div>
+             <p class="texto-carregamento">RECALIBRANDO O TEMPO (PROVAVELMENTE ERRADO)...</p>
+        </article>
+
+        <article class="card-dados mochileiro">
+             <header class="cabecalho-card"><span class="icone amarelo">🚀</span> Relatório Sub-Etéreo: Diretrizes do Guia (Ignoradas)</header>
+             <div class="conteudo-card">
+                <p>O Guia do Mochileiro é mais realista que muito livro de auto-ajuda. O universo é caótico, a burocracia é uma força da natureza (maligna) e a resposta pra tudo (<span class="num42">42</span>) não serve pra nada. A vida como ela é.</p>
+                 <p>"Não Entre em Pânico"? Tento. Mas aí lembro que preciso declarar Imposto de Renda ou encarar uma página em branco do Word pra escrever um artigo... o pânico vem, companheiro.</p>
+                 <p>A toalha é essencial, principalmente pra limpar o teclado depois que o café decide se rebelar contra a caneca.</p>
+                 <div class="entrada-log">
+                     <strong>Registro #3:</strong> <code>Experimento: Tentar usar lógica Vogônica para preencher formulário da Receita Federal. Formulário desenvolveu consciência, riu da minha cara e exigiu um poema ruim como sacrifício. Abortei e declarei tudo errado mesmo. O procedimento padrão.</code>
+                 </div>
+            </div>
+             <div class="barra-carregamento-falsa"><div></div></div>
+             <p class="texto-carregamento">PROCURANDO TOALHA LIMPA (MISSÃO IMPOSSÍVEL)...</p>
+        </article>
+
+        <article class="card-dados legado">
+            <header class="cabecalho-card"><span class="icone magenta">🗿</span> Arqueologia Reversa: História & Código Velho</header>
+            <div class="conteudo-card">
+                 <p>Fuçar em código antigo é igualzinho ler documento do século XVII: um monte de coisa escrita numa lógica que não faz mais sentido, sem comentário (ou com comentário mentiroso), e você tem que adivinhar o que diabos o sujeito tava pensando. Provavelmente nada bom.</p>
+                 <p>E o medo de mexer e quebrar o que já tava ruim? É o mesmo de sugerir reforma agrária em reunião de latifundiário. Melhor fazer uma média ali, passar uma fita isolante metafórica e seguir em frente.</p>
+                 <blockquote>"Se funcionava antes e parou agora sem eu mexer, a culpa é do universo (ou do estagiário fantasma)."<br/><i>- Eu, tentando justificar um bug.</i></blockquote>
+                 <div class="entrada-log">
+                      <strong>Registro #4:</strong> <code>Descoberta perturbadora: Aparentemente, o Acordo Ortográfico de 1990 foi implementado usando expressões regulares escritas por um chimpanzé bêbado. Isso explica muita coisa (e causou três `kernel panics` no meu corretor ortográfico).</code>
+                 </div>
+            </div>
+             <div class="barra-carregamento-falsa"><div></div></div>
+             <p class="texto-carregamento">REATORANDO CÓDIGO COM MEDO E TREMOR...</p>
+        </article>
+
+        <article class="card-dados fielder">
+            <header class="cabecalho-card"><span class="icone magenta">🧪</span> Laboratório de Ideias Ruins Nathan Fielder™</header>
+            <div class="conteudo-card">
+                 <p>Adoro a lógica torta do Nathan Fielder. Ele me representa: a pessoa que tem uma ideia que parece *ok* no papel, mas quando vai executar... sai um monstro de Frankenstein constrangedor. É o espírito da gambiarra levado ao extremo.</p>
+                 <p>Já tentei explicar a "Política dos Governadores" usando um jogo de War modificado com regras inventadas na hora. Resultado: Ninguém entendeu, as peças sumiram e um aluno declarou independência do fundão. Típico.</p>
+                 <div class="entrada-log">
+                    <strong>Registro #5:</strong> <code>Projeto "The Rehearsal: Aula de História": Contratei um ator para me interpretar dando aula, enquanto eu assistia de uma van. Ator foi melhor que eu. Depressão e síndrome de impostor aumentaram 200%. Experimento considerado 'um sucesso... pro ator'.</code>
+                </div>
+            </div>
+             <div class="barra-carregamento-falsa"><div></div></div>
+             <p class="texto-carregamento">TESTANDO LIMITES DA VERGONHA ALHEIA...</p>
+        </article>
+
+         <article class="card-dados trisolaran">
+             <header class="cabecalho-card"><span class="icone ciano">🔭</span> Sensor da Floresta Negra (Status: Modo 'Não Me Notem')</header>
+             <div class="conteudo-card">
+                 <p>A Teoria da Floresta Negra é genial (nos LIVROS, repito!). O universo é um lugar escuro e cheio de gente (ou coisa) que pode não gostar de você. A melhor tática? Fica pianinho. Não acende a luz, não faz barulho, não publica textão polêmico no Twitter. É a filosofia do "quem não é visto não é lembrado... nem desintegrado".</p>
+                 <p>A série? Fizeram um churrasco cósmico barulhento onde devia ter um jantar silencioso e tenso. Perderam a chance de mostrar que o maior perigo não são os monstros, mas o simples fato de existir e ser percebido.</p>
+                 <div class="floresta-negra"><strong>AVISO_SISTEMA:</strong> Detecção de E-mail com Assunto: "URGENTE: Reunião de Departamento Extraordinária". Iniciando protocolo 'Caixa de Entrada Radioativa'. Nível de Alerta: MÁXIMO. Ação: Marcar como não lido, fugir para as montanhas.</div>
+                 <div class="entrada-log">
+                     <strong>Registro #6:</strong> <code>Aplicação de conceito 'Cadeia de Desprezo': Historiador despreza sociólogo, que despreza filósofo, que despreza físico teórico, que despreza matemático... Sófon no final da cadeia apenas ri de todos nós. Hierarquia universal confirmada. Sentido: Nenhum.</code>
+                 </div>
+            </div>
+             <div class="barra-carregamento-falsa"><div></div></div>
+             <p class="texto-carregamento">ATIVANDO CAMPO DE INVISIBILIDADE SOCIAL...</p>
+        </article>
+
+        <article class="card-dados manias">
+             <header class="cabecalho-card"><span class="icone magenta">❗</span> Relatório de Erro: Configurações de Fábrica</header>
+             <div class="conteudo-card">
+                 <p>Flags Inatas (Sem Solução à Vista):</p>
+                 <p><span class="tag-mania">DRIVER_MAO_ESQUERDA</span>: Módulo de interação manual primário veio com DLL invertida de fábrica. Causa lentidão crônica em tarefas mundanas (cortar pão, usar tesoura). Teorias incluem erro genético, carma de vida passada ou simples sacanagem cósmica.</p>
+                <p><span class="tag-mania">MODULO_BALIZA_AUSENTE (vulgo: Não Dirige)</span>: Interface cérebro-pedal não responde. Confina o usuário a mercê do sistema de transporte público – um experimento social contínuo sobre os limites da paciência e da higiene.</p>
+                 <div class="entrada-log">
+                    <strong>Registro #7:</strong> <code>Constatação: Ser canhoto e não dirigir no Brasil aumenta em 73% a probabilidade de desenvolver um senso de humor baseado em desgraça alheia (e própria), um vasto repertório de trajetos de ônibus inúteis e a habilidade de cochilar em pé no busão lotado. Habilidades de sobrevivência urbana.</code>
+                </div>
+            </div>
+            <div class="barra-carregamento-falsa"><div></div></div>
+             <p class="texto-carregamento">EMULANDO NORMALIDADE...</p>
+        </article>
+
+         <article class="card-dados">
+            <header class="cabecalho-card"><span class="icone amarelo">⚡</span> Terminal da Resiliência Involuntária</header>
+             <div class="terminal-falso">
+<pre><span class="prompt"></span>python conserta_vida.py
+<span class="erro">Traceback (most recent call last):
+  File "conserta_vida.py", line 1, in <module>
+    import solucoes_magicas
+ModuleNotFoundError: No module named 'solucoes_magicas'</span>
+<span class="comentario"># Claro, por que teria?</span>
+<span class="prompt"></span>git commit -m "Adiciona mais problemas complexos"
+<span class="output">[main 1a2b3c4] Adiciona mais problemas complexos
+ 1 file changed, 20 insertions(+), 5 deletions(-)</span>
+<span class="comentario"># Progresso?</span>
+<span class="prompt"></span>alias café='echo "Digitando... mas primeiro, café."'
+<span class="prompt"></span>café<span class="cursor"> </span>
+</pre>
+             </div>
+         </article>
+
+         <article class="card-dados">
+              <header class="cabecalho-card"><span class="icone vermelho">💣</span> Laudo de Encerramento (Temporário)</header>
+              <div class="conteudo-card">
+                  <p>Este perfil é uma fotografia instantânea do caos controlado (ou nem tanto) que rege esta existência. É um lembrete de que misturar História, código amador e grandes doses de realidade brasileira resulta... nisto aqui.</p>
+                  <p><strong>Considerações Finais:</strong> Não leve muito a sério. Ou leve, sei lá. A vida é muito curta pra não rir da própria desgraça (e dos bugs alheios). Se encontrar um erro aqui, favor não consertar. Pode ser uma feature importante do meu ser.</p>
+                   <div class="entrada-log">
+                       <strong>Registro #8 - Diagnóstico de Humor:</strong> <code>Sistema operacional emocional identificado: 'Windows ME com Tema Trágico Cômico'. Trava inesperadamente, chora por motivo nenhum, mas ocasionalmente solta uma piada boa antes de dar tela azul. Classificação: Estável... na instabilidade.</code>
+                   </div>
+              </div>
+               <div class="barra-carregamento-falsa"><div></div></div>
+               <p class="texto-carregamento">SUSPENDENDO OPERAÇÕES (ATÉ O PRÓXIMO CAFÉ)...</p>
+          </article>
+
+    </main>
+
+    <footer class="rodape-sistema">
+        <p class="mensagem-rodape">:: // FIM DA TRANSMISSÃO (POR ENQUANTO) // Bugs arquivados para análise futura (ou esquecimento) ::</p>
+        <div class="links-rodape">
+            <a href="#top">[RETROCEDER_AO_INICIO]</a> |
+            <a href="mailto:ninguem@example.com?subject=Bug%20no%20Universo" target="_blank" rel="noopener noreferrer">[ENVIAR_FEEDBACK_AO_VAZIO]</a> |
+            <a href="https://github.com/Romulo" target="_blank" rel="noopener noreferrer">[RAIZ_GITHUB]</a>
+        </div>
+         <div class="ascii-rodape">
+          // Codificado com suor, lágrimas e Stack Overflow.
+         // Mantido no ar por um equilíbrio precário de cafeína e teimosia.
+        // Documentação? A gente vê isso depois (spoiler: não vê).
+       // Rômulo - Um experimento em andamento. Sem garantias.
+        </div>
+    </footer>
+
+</div> <!-- Fim container-geral -->
+
+</body>
+</html>
