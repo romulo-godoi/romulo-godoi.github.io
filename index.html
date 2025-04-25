@@ -49,9 +49,9 @@
             font-family: var(--font-header); font-size: 2em; color: var(--header-text); text-align: center; margin-bottom: 8px;
             text-shadow: var(--glow-cyan); position: relative; animation: glitch1 var(--glitch-speed) infinite alternate steps(3, start);
         }
-        .titulo-cabecalho::before, .titulo-cabecalho::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--terminal-bg); overflow: hidden; }
-        .titulo-cabecalho::before { left: 2px; text-shadow: -2px 0 var(--error-red); clip: rect(24px, 550px, 90px, 0); animation: glitch2 calc(var(--glitch-speed) * 1.5) infinite alternate-reverse steps(3, start); }
-        .titulo-cabecalho::after { left: -2px; text-shadow: -2px 0 var(--accent-lime), 2px 2px var(--accent-cyan); clip: rect(85px, 550px, 140px, 0); animation: glitch3 calc(var(--glitch-speed) * 1.1) infinite alternate-reverse steps(2, start); }
+        .titulo-cabecalho[data-text]::before, .titulo-cabecalho[data-text]::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--terminal-bg); overflow: hidden; }
+        .titulo-cabecalho[data-text]::before { left: 2px; text-shadow: -2px 0 var(--error-red); clip: rect(24px, 550px, 90px, 0); animation: glitch2 calc(var(--glitch-speed) * 1.5) infinite alternate-reverse steps(3, start); }
+        .titulo-cabecalho[data-text]::after { left: -2px; text-shadow: -2px 0 var(--accent-lime), 2px 2px var(--accent-cyan); clip: rect(85px, 550px, 140px, 0); animation: glitch3 calc(var(--glitch-speed) * 1.1) infinite alternate-reverse steps(2, start); }
         @keyframes glitch1 { 0%, 100% { transform: none; } 33% { transform: skew(-0.8deg) scale(1.01); } 66% { transform: skew(0.8deg) scale(0.99); }}
         @keyframes glitch2 { 0% { clip: rect(42px, 9999px, 44px, 0); transform: skew(0.5deg) translateX(-3px); } 100% { clip: rect(12px, 9999px, 85px, 0); transform: skew(-0.3deg) translateX(3px); }}
         @keyframes glitch3 { 0% { clip: rect(75px, 9999px, 86px, 0); transform: skew(-1deg) translateY(2px); } 100% { clip: rect(35px, 9999px, 50px, 0); transform: skew(0.7deg) translateY(-2px); }}
@@ -84,7 +84,7 @@
         .info-perfil code { background-color: var(--bg-color); color: var(--accent-yellow); padding: 3px 5px; border-radius: 3px; font-weight: bold;}
 
         .grid-conteudo { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 30px; }
-        .card-dados { background-color: var(--terminal-bg); border: 1px solid var(--border-color); box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 20px; display: flex; flex-direction: column; transition: var(--transition-fast); position: relative; }
+        .card-dados { background-color: var(--terminal-bg); border: 1px solid var(--border-color); box-shadow: 0 0 10px rgba(0,0,0,0.5); padding: 20px; display: flex; flex-direction: column; transition: var(--transition-fast); position: relative; margin-bottom: 30px; /* Adicionado margem inferior padrão */ }
         .card-dados:hover { border-color: var(--accent-cyan); box-shadow: inset 0 0 12px rgba(24, 220, 255, 0.25), 0 0 18px rgba(24, 220, 255, 0.4); transform: translateY(-4px) scale(1.01); }
         .cabecalho-card { font-family: var(--font-header); font-size: 1.2em; color: var(--header-text); margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px dashed var(--border-color); display: flex; align-items: center; }
         .cabecalho-card .icone { font-size: 1.4em; margin-right: 12px; line-height: 1; }
@@ -128,6 +128,21 @@
         .terminal-falso .cursor { display: inline-block; width: 9px; height: 1.1em; background-color: var(--accent-lime); animation: piscaCursor 0.9s infinite step-end; vertical-align: text-bottom; box-shadow: 0 0 3px var(--accent-lime); }
         @keyframes piscaCursor { 50% { opacity: 0; } }
 
+        /* Estilos para a nova seção de Projetos */
+        .secao-projetos { margin-top: 40px; } /* Espaçamento acima da seção */
+        .titulo-secao {
+            font-family: var(--font-header); color: var(--header-text); font-size: 1.6em;
+            margin-bottom: 25px; padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            text-shadow: var(--glow-cyan);
+        }
+        .titulo-secao::before { content: '// '; color: var(--accent-cyan); opacity: 0.7;}
+        .grid-projetos {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 30px;
+        }
+        .card-dados.projeto .cabecalho-card .icone { color: var(--accent-yellow); } /* Ícone amarelo para projetos */
+        /* Fim dos estilos para a nova seção */
+
         .rodape-sistema { border: 1px solid var(--border-color); background-color: var(--terminal-bg); padding: 20px; margin-top: 40px; text-align: center; font-size: 0.85em; box-shadow: 0 0 10px rgba(0,0,0,0.4); }
         .mensagem-rodape { margin-bottom: 15px; color: var(--accent-yellow); font-style: italic; }
         .links-rodape a { color: var(--accent-cyan); text-decoration: none; margin: 0 10px;}
@@ -139,12 +154,13 @@
             .cabecalho-sistema { padding: 20px; margin-bottom: 30px;}
             .titulo-cabecalho { font-size: 1.6em; }
             .subtitulo-cabecalho { font-size: 0.9em; }
-            .grid-conteudo { grid-template-columns: 1fr; gap: 25px; }
+            .grid-conteudo, .grid-projetos { grid-template-columns: 1fr; gap: 25px; } /* Aplica a coluna única ao grid de projetos também */
             .card-perfil-usuario { flex-direction: column; align-items: center; padding: 15px; margin-bottom: 30px; }
             .area-foto { flex-basis: auto; width: 100%; max-width: 250px; }
             .info-perfil { flex-basis: auto; width: 100%; text-align: center; }
             .info-perfil h2 { font-size: 1.3em; }
-            .card-dados { padding: 15px; }
+            .titulo-secao { font-size: 1.4em; margin-bottom: 20px; } /* Ajusta tamanho do título da seção */
+            .card-dados { padding: 15px; margin-bottom: 25px; } /* Ajusta padding e margem */
             .rodape-sistema { padding: 15px; margin-top: 30px; }
         }
 
@@ -153,7 +169,7 @@
             .container-geral { padding: 10px; margin: 15px auto; }
             .cabecalho-sistema { padding: 15px; margin-bottom: 25px; }
             .titulo-cabecalho { font-size: 1.4em; animation: none; }
-            .titulo-cabecalho::before, .titulo-cabecalho::after { display: none; }
+            .titulo-cabecalho[data-text]::before, .titulo-cabecalho[data-text]::after { display: none; }
             .subtitulo-cabecalho { font-size: 0.85em; }
             .logo-cabecalho { font-size: 0.6em; line-height: 1.1; }
             .barra-status { flex-direction: column; align-items: center; gap: 8px; font-size: 0.8em; padding-top: 10px; }
@@ -163,8 +179,9 @@
             .legenda-foto { font-size: 0.8em; }
             .info-perfil h2 { font-size: 1.2em; margin-bottom: 12px; }
             .info-perfil p { font-size: 0.9em; margin-bottom: 10px; }
-            .grid-conteudo { gap: 20px; }
-            .card-dados { padding: 12px; margin-bottom: 25px;}
+            .titulo-secao { font-size: 1.3em; margin-bottom: 15px; } /* Ajusta título da seção */
+            .grid-conteudo, .grid-projetos { gap: 20px; } /* Ajusta gap */
+            .card-dados { padding: 12px; margin-bottom: 20px;} /* Ajusta padding e margem */
             .cabecalho-card { font-size: 1.1em; margin-bottom: 15px; }
             .conteudo-card { font-size: 0.9em; }
             .conteudo-card p { margin-bottom: 10px; }
@@ -228,136 +245,205 @@
         </div>
     </section>
 
-    <main class="grid-conteudo">
+    <main> {/* Tag <main> envolve o conteúdo principal */}
+        <div class="grid-conteudo">
 
-        <article class="card-dados linux">
-            <header class="cabecalho-card"><span class="icone verde">⚙️</span> SO: openSUSE Tumbleweed (Vulgo: 'A Emoção Inútil')</header>
-            <div class="conteudo-card">
-                <p>Instalei o Tumbleweed. Dizem que é "estar na crista da onda". Pra mim, é mais como tentar surfar num tsunami usando uma tábua de passar roupa. Cada <code>zypper dup</code> é uma roleta russa: ou ganho um kernel novinho ou meu sistema resolve tirar férias permanentes sem avisar. É uma relação tóxica, eu sei.</p>
-                <p>Mas pelo menos não preciso me preocupar com vírus. Já basta ter que lidar com o fantasma do Getúlio assombrando minhas aulas.</p>
-                 <div class="entrada-log">
-                     <strong>Registro #1:</strong> <code>O sistema operacional adquiriu consciência própria e decidiu que o conceito de 'data e hora' era opcional após update. Arquivos de log de 2077 apareceram misteriosamente. Solução: Format C:? Não, só reiniciei e continuei fingindo que nada aconteceu. A técnica histórica padrão para resolver problemas incômodos.</code>
-                 </div>
-            </div>
-             <div class="barra-carregamento-falsa"><div></div></div>
-             <p class="texto-carregamento">IGNORANDO DEPENDÊNCIAS QUEBRADAS...</p>
-        </article>
-
-        <article class="card-dados whovian">
-            <header class="cabecalho-card"><span class="icone ciano"><span class="icone-tardis">🌀</span></span> Crono-Análise: Fissura de Doctor Who na Realidade</header>
-            <div class="conteudo-card">
-                <p>Doctor Who é legalzinho e tal, mas sejamos sinceros: viajar no tempo seria um inferno. Imagina ter que explicar o Wi-Fi pra um bandeirante? Ou pior, ouvir ele reclamar que "no meu tempo, a gente caçava índio e não ficava vendo essa tela brilhante". Melhor assistir da poltrona mesmo.</p>
-                <p>E se a TARDIS caísse na mão de político brasileiro? Teríamos engarrafamento de caixa azul no espaço-tempo pra ir almoçar em Paris. Desastre cósmico anunciado.</p>
-                 <div class="entrada-log">
-                    <strong>Registro #2:</strong> <code>Usuário tentou calcular quanto tempo perderia em filas (Detran, banco, SUS) numa vida inteira. Resultado excedeu a capacidade do processador e sugeriu que seria mais rápido esperar o universo acabar. Informação considerada 'deprimente, mas precisa'.</code>
-                 </div>
-            </div>
-             <div class="barra-carregamento-falsa"><div></div></div>
-             <p class="texto-carregamento">RECALIBRANDO O TEMPO (PROVAVELMENTE ERRADO)...</p>
-        </article>
-
-        <article class="card-dados mochileiro">
-             <header class="cabecalho-card"><span class="icone amarelo">🚀</span> Relatório Sub-Etéreo: Diretrizes do Guia (Ignoradas)</header>
-             <div class="conteudo-card">
-                <p>O Guia do Mochileiro é mais realista que muito livro de auto-ajuda. O universo é caótico, a burocracia é uma força da natureza (maligna) e a resposta pra tudo (<span class="num42">42</span>) não serve pra nada. A vida como ela é.</p>
-                 <p>"Não Entre em Pânico"? Tento. Mas aí lembro que preciso declarar Imposto de Renda ou encarar uma página em branco do Word pra escrever um artigo... o pânico vem, companheiro.</p>
-                 <p>A toalha é essencial, principalmente pra limpar o teclado depois que o café decide se rebelar contra a caneca.</p>
-                 <div class="entrada-log">
-                     <strong>Registro #3:</strong> <code>Experimento: Tentar usar lógica Vogônica para preencher formulário da Receita Federal. Formulário desenvolveu consciência pela terceira vez, riu da minha cara e exigiu um poema ruim como sacrifício. Abortei e declarei tudo errado mesmo. O procedimento padrão.</code>
-                 </div>
-            </div>
-             <div class="barra-carregamento-falsa"><div></div></div>
-             <p class="texto-carregamento">PROCURANDO TOALHA LIMPA (MISSÃO IMPOSSÍVEL)...</p>
-        </article>
-
-        <article class="card-dados legado">
-            <header class="cabecalho-card"><span class="icone magenta">🗿</span> Arqueologia Reversa: História & Código Velho</header>
-            <div class="conteudo-card">
-                 <p>Fuçar em código antigo é igualzinho ler documento do século XVII: um monte de coisa escrita numa lógica que não faz mais sentido, sem comentário (ou com comentário mentiroso), e você tem que adivinhar o que diabos o sujeito tava pensando. Provavelmente nada bom.</p>
-                 <p>E o medo de mexer e quebrar o que já tava ruim? É o mesmo de sugerir reforma agrária em reunião de latifundiário. Melhor fazer uma média ali, passar uma fita isolante metafórica e seguir em frente.</p>
-                 <blockquote>"Se funcionava antes e parou agora sem eu mexer, a culpa é do universo (ou do estagiário fantasma)."<br/><i>- Eu, tentando justificar um bug.</i></blockquote>
-                 <div class="entrada-log">
-                      <strong>Registro #4:</strong> <code>Descoberta perturbadora: Aparentemente, o Acordo Ortográfico de 1990 foi implementado usando expressões regulares escritas por um chimpanzé bêbado. Isso explica muita coisa (e causou três `kernel panics` no meu corretor ortográfico).</code>
-                 </div>
-            </div>
-             <div class="barra-carregamento-falsa"><div></div></div>
-             <p class="texto-carregamento">REATORANDO CÓDIGO COM MEDO E TREMOR...</p>
-        </article>
-
-        <article class="card-dados fielder">
-            <header class="cabecalho-card"><span class="icone magenta">🧪</span> Laboratório de Ideias Ruins Nathan Fielder™</header>
-            <div class="conteudo-card">
-                 <p>Adoro a lógica torta do Nathan Fielder. Ele me representa: a pessoa que tem uma ideia que parece *ok* no papel, mas quando vai executar... sai um monstro de Frankenstein constrangedor. É o espírito da gambiarra levado ao extremo.</p>
-                 <p>Já tentei explicar a "Política dos Governadores" usando um jogo de War modificado com regras inventadas na hora. Resultado: Ninguém entendeu, as peças sumiram e um aluno declarou independência do fundão. Típico.</p>
-                 <div class="entrada-log">
-                    <strong>Registro #5:</strong> <code>Projeto "The Rehearsal: Aula de História": Contratei um ator para me interpretar dando aula, enquanto eu assistia de uma van. Ator foi melhor que eu. Depressão e síndrome de impostor aumentaram 200%. Experimento considerado 'um sucesso... pro ator'.</code>
+            <article class="card-dados linux">
+                <header class="cabecalho-card"><span class="icone verde">⚙️</span> SO: openSUSE Tumbleweed (Vulgo: 'A Emoção Inútil')</header>
+                <div class="conteudo-card">
+                    <p>Instalei o Tumbleweed. Dizem que é "estar na crista da onda". Pra mim, é mais como tentar surfar num tsunami usando uma tábua de passar roupa. Cada <code>zypper dup</code> é uma roleta russa: ou ganho um kernel novinho ou meu sistema resolve tirar férias permanentes sem avisar. É uma relação tóxica, eu sei.</p>
+                    <p>Mas pelo menos não preciso me preocupar com vírus. Já basta ter que lidar com o fantasma do Getúlio assombrando minhas aulas.</p>
+                     <div class="entrada-log">
+                         <strong>Registro #1:</strong> <code>O sistema operacional adquiriu consciência própria e decidiu que o conceito de 'data e hora' era opcional após update. Arquivos de log de 2077 apareceram misteriosamente. Solução: Format C:? Não, só reiniciei e continuei fingindo que nada aconteceu. A técnica histórica padrão para resolver problemas incômodos.</code>
+                     </div>
                 </div>
-            </div>
-             <div class="barra-carregamento-falsa"><div></div></div>
-             <p class="texto-carregamento">TESTANDO LIMITES DA VERGONHA ALHEIA...</p>
-        </article>
+                 <div class="barra-carregamento-falsa"><div></div></div>
+                 <p class="texto-carregamento">IGNORANDO DEPENDÊNCIAS QUEBRADAS...</p>
+            </article>
 
-         <article class="card-dados trisolaran">
-             <header class="cabecalho-card"><span class="icone ciano">🔭</span> Sensor da Floresta Negra (Status: Modo 'Não Me Notem')</header>
-             <div class="conteudo-card">
-                 <p>A Teoria da Floresta Negra é genial (nos LIVROS, repito!). O universo é um lugar escuro e cheio de gente (ou coisa) que pode não gostar de você. A melhor tática? Fica pianinho. Não acende a luz, não faz barulho, não publica textão polêmico no Twitter. É a filosofia do "quem não é visto não é lembrado... nem desintegrado".</p>
-                 <p>A série? Fizeram um churrasco cósmico barulhento onde devia ter um jantar silencioso e tenso. Perderam a chance de mostrar que o maior perigo não são os monstros, mas o simples fato de existir e ser percebido.</p>
-                 <div class="floresta-negra"><strong>AVISO_SISTEMA:</strong> Detecção de E-mail com Assunto: "URGENTE: Reunião de Departamento Extraordinária". Iniciando protocolo 'Caixa de Entrada Radioativa'. Nível de Alerta: MÁXIMO. Ação: Marcar como não lido, fugir para as montanhas.</div>
-                 <div class="entrada-log">
-                     <strong>Registro #6:</strong> <code>Aplicação de conceito 'Cadeia de Desprezo': Historiador despreza sociólogo, que despreza filósofo, que despreza físico teórico, que despreza matemático... Sófon no final da cadeia apenas ri de todos nós. Hierarquia universal confirmada. Sentido: Nenhum.</code>
-                 </div>
-            </div>
-             <div class="barra-carregamento-falsa"><div></div></div>
-             <p class="texto-carregamento">ATIVANDO CAMPO DE INVISIBILIDADE SOCIAL...</p>
-        </article>
-
-        <article class="card-dados manias">
-             <header class="cabecalho-card"><span class="icone magenta">❗</span> Relatório de Erro: Configurações de Fábrica</header>
-             <div class="conteudo-card">
-                 <p>Flags Inatas (Sem Solução à Vista):</p>
-                 <p><span class="tag-mania">DRIVER_MAO_ESQUERDA</span>: Módulo de interação manual primário veio com DLL invertida de fábrica. Causa lentidão crônica em tarefas mundanas (cortar pão, usar tesoura). Teorias incluem erro genético, carma de vida passada ou simples sacanagem cósmica.</p>
-                <p><span class="tag-mania">MODULO_BALIZA_AUSENTE (vulgo: Não Dirige)</span>: Interface cérebro-pedal não responde. Confina o usuário a mercê do sistema de transporte público – um experimento social contínuo sobre os limites da paciência e da higiene.</p>
-                 <div class="entrada-log">
-                    <strong>Registro #7:</strong> <code>Constatação: Ser canhoto e não dirigir no Brasil aumenta em 73% a probabilidade de desenvolver um senso de humor baseado em desgraça alheia (e própria), um vasto repertório de trajetos de ônibus inúteis e a habilidade de cochilar em pé no busão lotado. Habilidades de sobrevivência urbana.</code>
+            <article class="card-dados whovian">
+                <header class="cabecalho-card"><span class="icone ciano"><span class="icone-tardis">🌀</span></span> Crono-Análise: Fissura de Doctor Who na Realidade</header>
+                <div class="conteudo-card">
+                    <p>Doctor Who é legalzinho e tal, mas sejamos sinceros: viajar no tempo seria um inferno. Imagina ter que explicar o Wi-Fi pra um bandeirante? Ou pior, ouvir ele reclamar que "no meu tempo, a gente caçava índio e não ficava vendo essa tela brilhante". Melhor assistir da poltrona mesmo.</p>
+                    <p>E se a TARDIS caísse na mão de político brasileiro? Teríamos engarrafamento de caixa azul no espaço-tempo pra ir almoçar em Paris. Desastre cósmico anunciado.</p>
+                     <div class="entrada-log">
+                        <strong>Registro #2:</strong> <code>Usuário tentou calcular quanto tempo perderia em filas (Detran, banco, SUS) numa vida inteira. Resultado excedeu a capacidade do processador e sugeriu que seria mais rápido esperar o universo acabar. Informação considerada 'deprimente, mas precisa'.</code>
+                     </div>
                 </div>
-            </div>
-            <div class="barra-carregamento-falsa"><div></div></div>
-             <p class="texto-carregamento">EMULANDO NORMALIDADE...</p>
-        </article>
+                 <div class="barra-carregamento-falsa"><div></div></div>
+                 <p class="texto-carregamento">RECALIBRANDO O TEMPO (PROVAVELMENTE ERRADO)...</p>
+            </article>
 
-         <article class="card-dados">
-            <header class="cabecalho-card"><span class="icone amarelo">⚡</span> Terminal da Resiliência Involuntária</header>
-             <div class="terminal-falso">
-<pre><span class="prompt"></span>python conserta_vida.py
-<span class="erro">Traceback (most recent call last):
-  File "conserta_vida.py", line 1, in <module>
-    import solucoes_magicas
-ModuleNotFoundError: No module named 'solucoes_magicas'</span>
+            <article class="card-dados mochileiro">
+                 <header class="cabecalho-card"><span class="icone amarelo">🚀</span> Relatório Sub-Etéreo: Diretrizes do Guia (Ignoradas)</header>
+                 <div class="conteudo-card">
+                    <p>O Guia do Mochileiro é mais realista que muito livro de auto-ajuda. O universo é caótico, a burocracia é uma força da natureza (maligna) e a resposta pra tudo (<span class="num42">42</span>) não serve pra nada. A vida como ela é.</p>
+                     <p>"Não Entre em Pânico"? Tento. Mas aí lembro que preciso declarar Imposto de Renda ou encarar uma página em branco do Word pra escrever um artigo... o pânico vem, companheiro.</p>
+                     <p>A toalha é essencial, principalmente pra limpar o teclado depois que o café decide se rebelar contra a caneca.</p>
+                     <div class="entrada-log">
+                         <strong>Registro #3:</strong> <code>Experimento: Tentar usar lógica Vogônica para preencher formulário da Receita Federal. Formulário desenvolveu consciência pela terceira vez, riu da minha cara e exigiu um poema ruim como sacrifício. Abortei e declarei tudo errado mesmo. O procedimento padrão.</code>
+                     </div>
+                </div>
+                 <div class="barra-carregamento-falsa"><div></div></div>
+                 <p class="texto-carregamento">PROCURANDO TOALHA LIMPA (MISSÃO IMPOSSÍVEL)...</p>
+            </article>
 
-<span class="prompt"></span>git commit -m "Adiciona mais problemas complexos"
-<span class="output">[main 1a2b3c4] Adiciona mais problemas complexos
- 1 file changed, 20 insertions(+), 5 deletions(-)</span>
+            <article class="card-dados legado">
+                <header class="cabecalho-card"><span class="icone magenta">🗿</span> Arqueologia Reversa: História & Código Velho</header>
+                <div class="conteudo-card">
+                     <p>Fuçar em código antigo é igualzinho ler documento do século XVII: um monte de coisa escrita numa lógica que não faz mais sentido, sem comentário (ou com comentário mentiroso), e você tem que adivinhar o que diabos o sujeito tava pensando. Provavelmente nada bom.</p>
+                     <p>E o medo de mexer e quebrar o que já tava ruim? É o mesmo de sugerir reforma agrária em reunião de latifundiário. Melhor fazer uma média ali, passar uma fita isolante metafórica e seguir em frente.</p>
+                     <blockquote>"Se funcionava antes e parou agora sem eu mexer, a culpa é do universo (ou do estagiário fantasma)."<br/><i>- Eu, tentando justificar um bug.</i></blockquote>
+                     <div class="entrada-log">
+                          <strong>Registro #4:</strong> <code>Descoberta perturbadora: Aparentemente, o Acordo Ortográfico de 1990 foi implementado usando expressões regulares escritas por um chimpanzé bêbado. Isso explica muita coisa (e causou três `kernel panics` no meu corretor ortográfico).</code>
+                     </div>
+                </div>
+                 <div class="barra-carregamento-falsa"><div></div></div>
+                 <p class="texto-carregamento">REATORANDO CÓDIGO COM MEDO E TREMOR...</p>
+            </article>
 
-<span class="prompt"></span>alias café='echo "Digitando... mas primeiro, café."'
-<span class="prompt"></span>café<span class="cursor"> </span>
-</pre>
-             </div>
-         </article>
+            <article class="card-dados fielder">
+                <header class="cabecalho-card"><span class="icone magenta">🧪</span> Laboratório de Ideias Ruins Nathan Fielder™</header>
+                <div class="conteudo-card">
+                     <p>Adoro a lógica torta do Nathan Fielder. Ele me representa: a pessoa que tem uma ideia que parece *ok* no papel, mas quando vai executar... sai um monstro de Frankenstein constrangedor. É o espírito da gambiarra levado ao extremo.</p>
+                     <p>Já tentei explicar a "Política dos Governadores" usando um jogo de War modificado com regras inventadas na hora. Resultado: Ninguém entendeu, as peças sumiram e um aluno declarou independência do fundão. Típico.</p>
+                     <div class="entrada-log">
+                        <strong>Registro #5:</strong> <code>Projeto "The Rehearsal: Aula de História": Contratei um ator para me interpretar dando aula, enquanto eu assistia de uma van. Ator foi melhor que eu. Depressão e síndrome de impostor aumentaram 200%. Experimento considerado 'um sucesso... pro ator'.</code>
+                    </div>
+                </div>
+                 <div class="barra-carregamento-falsa"><div></div></div>
+                 <p class="texto-carregamento">TESTANDO LIMITES DA VERGONHA ALHEIA...</p>
+            </article>
 
-         <article class="card-dados">
-              <header class="cabecalho-card"><span class="icone vermelho">💣</span> Laudo de Encerramento (Temporário)</header>
-              <div class="conteudo-card">
-                  <p>Este perfil é uma fotografia instantânea do caos controlado (ou nem tanto) que rege esta existência. É um lembrete de que misturar História, código amador e grandes doses de realidade brasileira resulta... nisto aqui.</p>
-                  <p><strong>Considerações Finais:</strong> Não leve muito a sério. Ou leve, sei lá. A vida é muito curta pra não rir da própria desgraça (e dos bugs alheios). Se encontrar um erro aqui, favor não consertar. Pode ser uma feature importante do meu ser.</p>
-                   <div class="entrada-log">
-                       <strong>Registro #8 - Diagnóstico de Humor:</strong> <code>Sistema operacional emocional identificado: 'Windows ME com Tema Trágico Cômico'. Trava inesperadamente, chora por motivo nenhum, mas ocasionalmente solta uma piada boa antes de dar tela azul. Classificação: Estável... na instabilidade.</code>
-                   </div>
-              </div>
-               <div class="barra-carregamento-falsa"><div></div></div>
-               <p class="texto-carregamento">SUSPENDENDO OPERAÇÕES (ATÉ O PRÓXIMO CAFÉ)...</p>
-          </article>
+             <article class="card-dados trisolaran">
+                 <header class="cabecalho-card"><span class="icone ciano">🔭</span> Sensor da Floresta Negra (Status: Modo 'Não Me Notem')</header>
+                 <div class="conteudo-card">
+                     <p>A Teoria da Floresta Negra é genial (nos LIVROS, repito!). O universo é um lugar escuro e cheio de gente (ou coisa) que pode não gostar de você. A melhor tática? Fica pianinho. Não acende a luz, não faz barulho, não publica textão polêmico no Twitter. É a filosofia do "quem não é visto não é lembrado... nem desintegrado".</p>
+                     <p>A série? Fizeram um churrasco cósmico barulhento onde devia ter um jantar silencioso e tenso. Perderam a chance de mostrar que o maior perigo não são os monstros, mas o simples fato de existir e ser percebido.</p>
+                     <div class="floresta-negra"><strong>AVISO_SISTEMA:</strong> Detecção de E-mail com Assunto: "URGENTE: Reunião de Departamento Extraordinária". Iniciando protocolo 'Caixa de Entrada Radioativa'. Nível de Alerta: MÁXIMO. Ação: Marcar como não lido, fugir para as montanhas.</div>
+                     <div class="entrada-log">
+                         <strong>Registro #6:</strong> <code>Aplicação de conceito 'Cadeia de Desprezo': Historiador despreza sociólogo, que despreza filósofo, que despreza físico teórico, que despreza matemático... Sófon no final da cadeia apenas ri de todos nós. Hierarquia universal confirmada. Sentido: Nenhum.</code>
+                     </div>
+                </div>
+                 <div class="barra-carregamento-falsa"><div></div></div>
+                 <p class="texto-carregamento">ATIVANDO CAMPO DE INVISIBILIDADE SOCIAL...</p>
+            </article>
 
-    </main>
+            <article class="card-dados manias">
+                 <header class="cabecalho-card"><span class="icone magenta">❗</span> Relatório de Erro: Configurações de Fábrica</header>
+                 <div class="conteudo-card">
+                     <p>Flags Inatas (Sem Solução à Vista):</p>
+                     <p><span class="tag-mania">DRIVER_MAO_ESQUERDA</span>: Módulo de interação manual primário veio com DLL invertida de fábrica. Causa lentidão crônica em tarefas mundanas (cortar pão, usar tesoura). Teorias incluem erro genético, carma de vida passada ou simples sacanagem cósmica.</p>
+                    <p><span class="tag-mania">MODULO_BALIZA_AUSENTE (vulgo: Não Dirige)</span>: Interface cérebro-pedal não responde. Confina o usuário a mercê do sistema de transporte público – um experimento social contínuo sobre os limites da paciência e da higiene.</p>
+                     <div class="entrada-log">
+                        <strong>Registro #7:</strong> <code>Constatação: Ser canhoto e não dirigir no Brasil aumenta em 73% a probabilidade de desenvolver um senso de humor baseado em desgraça alheia (e própria), um vasto repertório de trajetos de ônibus inúteis e a habilidade de cochilar em pé no busão lotado. Habilidades de sobrevivência urbana.</code>
+                    </div>
+                </div>
+                <div class="barra-carregamento-falsa"><div></div></div>
+                 <p class="texto-carregamento">EMULANDO NORMALIDADE...</p>
+            </article>
+
+             <article class="card-dados">
+                <header class="cabecalho-card"><span class="icone amarelo">⚡</span> Terminal da Resiliência Involuntária</header>
+                 <div class="terminal-falso">
+    <pre><span class="prompt"></span>python conserta_vida.py
+    <span class="erro">Traceback (most recent call last):
+      File "conserta_vida.py", line 1, in <module>
+        import solucoes_magicas
+    ModuleNotFoundError: No module named 'solucoes_magicas'</span>
+
+    <span class="prompt"></span>git commit -m "Adiciona mais problemas complexos"
+    <span class="output">[main 1a2b3c4] Adiciona mais problemas complexos
+     1 file changed, 20 insertions(+), 5 deletions(-)</span>
+
+    <span class="prompt"></span>alias café='echo "Digitando... mas primeiro, café."'
+    <span class="prompt"></span>café<span class="cursor"> </span>
+    </pre>
+                 </div>
+             </article>
+
+             <article class="card-dados">
+                  <header class="cabecalho-card"><span class="icone vermelho">💣</span> Laudo de Encerramento (Temporário)</header>
+                  <div class="conteudo-card">
+                      <p>Este perfil é uma fotografia instantânea do caos controlado (ou nem tanto) que rege esta existência. É um lembrete de que misturar História, código amador e grandes doses de realidade brasileira resulta... nisto aqui.</p>
+                      <p><strong>Considerações Finais:</strong> Não leve muito a sério. Ou leve, sei lá. A vida é muito curta pra não rir da própria desgraça (e dos bugs alheios). Se encontrar um erro aqui, favor não consertar. Pode ser uma feature importante do meu ser.</p>
+                       <div class="entrada-log">
+                           <strong>Registro #8 - Diagnóstico de Humor:</strong> <code>Sistema operacional emocional identificado: 'Windows ME com Tema Trágico Cômico'. Trava inesperadamente, chora por motivo nenhum, mas ocasionalmente solta uma piada boa antes de dar tela azul. Classificação: Estável... na instabilidade.</code>
+                       </div>
+                  </div>
+                   <div class="barra-carregamento-falsa"><div></div></div>
+                   <p class="texto-carregamento">SUSPENDENDO OPERAÇÕES (ATÉ O PRÓXIMO CAFÉ)...</p>
+              </article>
+
+        </div><!-- Fim de .grid-conteudo -->
+
+        <!-- ========================== NOVA SEÇÃO DE PROJETOS ========================== -->
+        <section class="secao-projetos">
+            <h2 class="titulo-secao">// PROJETOS_EM_PROGRESSO (OU_ABANDONADOS)</h2>
+
+            <div class="grid-projetos">
+
+                <article class="card-dados projeto">
+                    <header class="cabecalho-card">
+                        <span class="icone amarelo">🛠️</span> <!-- Ícone amarelo para projeto -->
+                        Registro de Campo Pioneiro
+                    </header>
+                    <div class="conteudo-card">
+                        <p>Uma tentativa ousada de criar um sistema para que você consiga gerenciar suas horas como pioneiro de forma simples e prática.</p>
+                        <p><strong>Tecnologias:</strong> <code>JavaScript</code>, <code>CSS3</code>, <code>HTML5</code>, <code>Local Storage</code></p>
+                        <p>
+                            <a href="https://github.com/romulo-godoi/relatorio" target="_blank" rel="noopener noreferrer">[VER_CODIGO_FONTE]</a> |
+                            <a href="https://romulo-godoi.github.io/relatorio/" target="_blank" rel="noopener noreferrer">Página Oficial</a>
+                        </p>
+                         <div class="entrada-log" style="border-left-color: var(--accent-cyan);">
+                             <strong>Status #9:</strong> <code>Versão estável disponibilizada. Sem graves bugs conhecidos. Trabalhando (ou não) na opção de sincronização</code>
+                         </div>
+                    </div>
+                     <div class="barra-carregamento-falsa"><div></div></div>
+                     <p class="texto-carregamento">Demorei um mês pra aprender fazer gráfico</p>
+                </article>
+
+                <article class="card-dados projeto">
+                    <header class="cabecalho-card">
+                        <span class="icone amarelo">💾</span>
+                        Gerador de Desculpas Históricas (BREVE)
+                    </header>
+                    <div class="conteudo-card">
+                        <p>Um script simples para gerar desculpas aleatórias baseadas em figuras e eventos históricos. Ex: "Não terminei o relatório porque fui acometido pela mesma melancolia que D. Pedro I sentiu após abdicar."</p>
+                        <p><strong>Tecnologias:</strong> <code>JavaScript (Vanilla)</code>, <code>muita criatividade duvidosa</code></p>
+                        <p>
+                            <a href="https://github.com/romulo-godoi/gerador-desculpas" target="_blank" rel="noopener noreferrer">[REPOSITORIO_GITHUB]</a>
+                            <!-- Sem demo ao vivo, roda no console talvez -->
+                        </p>
+                         <div class="entrada-log" style="border-left-color: var(--accent-cyan);">
+                             <strong>Status #10:</strong> <code>Funcional, porém eticamente questionável. Usado extensivamente pelo autor para justificar procrastinação. Necessita de mais figuras trágicas.</code>
+                         </div>
+                    </div>
+                    <!-- Sem barra de carregamento para variar -->
+                </article>
+
+                <article class="card-dados projeto">
+                    <header class="cabecalho-card">
+                        <span class="icone amarelo">📜</span>
+                        Website 'História com Gifs' (EM HIATO)
+                    </header>
+                    <div class="conteudo-card">
+                        <p>Plano ambicioso de explicar a história do Brasil usando apenas Gifs animados. Empacou na fase de encontrar um gif que represente adequadamente a Crise do Encilhamento.</p>
+                        <p><strong>Tecnologias:</strong> <code>HTML</code>, <code>CSS</code>, <code>muita pesquisa no Giphy</code></p>
+                        <p>
+                            <a href="#" target="_blank" rel="noopener noreferrer">[ESBOCO_NO_PAPEL]</a>
+                        </p>
+                         <div class="entrada-log" style="border-left-color: var(--accent-cyan);">
+                             <strong>Status #11:</strong> <code>Paralisado. Busca por gifs resultou em 8 horas perdidas vendo vídeos de gatos. Projeto considerado perigoso para a produtividade.</code>
+                         </div>
+                    </div>
+                     <div class="barra-carregamento-falsa"><div></div></div>
+                     <p class="texto-carregamento">PROCURANDO GIF PERFEITO...</p>
+                </article>
+
+                 </div><!-- Fim de .grid-projetos -->
+        </section>
+        <!-- ========================== FIM DA SEÇÃO DE PROJETOS ========================== -->
 
     <footer class="rodape-sistema">
         <p class="mensagem-rodape">:: // FIM DA TRANSMISSÃO (POR ENQUANTO) // Bugs arquivados para análise futura (ou esquecimento) ::</p>
@@ -374,7 +460,7 @@ ModuleNotFoundError: No module named 'solucoes_magicas'</span>
         </div>
     </footer>
 
-</div>
+</div> <!-- Fim de .container-geral -->
 
 </body>
 </html>
